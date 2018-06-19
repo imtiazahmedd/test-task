@@ -1,7 +1,16 @@
 import React from 'react';
 import './style.scss';
+import ReactTable from "react-table";
+import 'react-table/react-table.css'
+
 export default class HomePage extends React.PureComponent {
 
+  constructor(){
+    super();
+    this.state = {
+      pokemon : []
+    }
+  }
 
   componentDidMount(){
     var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
@@ -21,16 +30,45 @@ export default class HomePage extends React.PureComponent {
       })
 
       Promise.all(list).then((res) => {
-        console.log(res,'resssssssssssssssss')
+        this.setState({pokemon : res})
       })
     })
   }
 
   render() {
+    console.log(this.state.pokemon,'pokemon***********');
+
+    const data = [{
+      name: 'Tanner Linsley',
+      age: 26,
+      friend: {
+        name: 'Jason Maurer',
+        age: 23,
+      }
+    },
+    ]
+    const columns = [{
+      Header: 'Name',
+      accessor: 'name'
+    }, {
+      Header: 'Avatar',
+      accessor: 'age',
+      Cell: props => <span className='number'>{props.value}</span>
+    }, {
+      id: 'friendName',
+      Header: 'Type',
+      accessor: d => d.friend.name
+    }, {
+      Header: props => <span>Friend Age</span>,
+      accessor: 'friend.age'
+    }]
+
     return(
-      <div>
-        <h1>testing app</h1>
-      </div>
+      <ReactTable
+        showPaginationBottom={false}
+        data={data}
+        columns={columns}
+      />
     )
   }
 }
