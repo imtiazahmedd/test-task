@@ -7,8 +7,10 @@ const argv = require('./util/argv');
 const port = require('./util//port');
 const setup = require('./middlewares/frontendMiddleware');
 const { resolve } = require('path');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);
