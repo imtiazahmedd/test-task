@@ -8,6 +8,7 @@ export default class HomePage extends React.PureComponent {
   constructor(){
     super();
     this.state = {
+      //181087216071358
       pokemon : []
     }
   }
@@ -24,7 +25,12 @@ export default class HomePage extends React.PureComponent {
           fetch(proxyUrl + el.url).then((response)=>{
             return response.json();
           }).then((resp)=>{
-            resolve(resp);
+            var types = '';
+            resp.types.map((el)=>{
+              types += el.type.name + ",";
+            });
+            let obj = {name : resp.name , avatar : resp.sprites.front_shiny, type: types, attribute : resp.species.name}
+            resolve(obj);
           })
         })
       })
@@ -36,36 +42,30 @@ export default class HomePage extends React.PureComponent {
   }
 
   render() {
-    console.log(this.state.pokemon,'pokemon***********');
-
-    const data = [{
-      name: 'Tanner Linsley',
-      age: 26,
-      friend: {
-        name: 'Jason Maurer',
-        age: 23,
-      }
-    },
-    ]
+    console.log(this.state.pokemon,'pokemeonnnnnnnnnnnnnnnnnnnnnnnn')
+    const data = [];
+    this.state.pokemon.map((el)=>{
+      data.push(el);
+    })
     const columns = [{
       Header: 'Name',
       accessor: 'name'
     }, {
       Header: 'Avatar',
-      accessor: 'age',
-      Cell: props => <span className='number'>{props.value}</span>
+      Cell: (row) => {
+        return <div><img src={row.original.avatar}/></div>
+      },
+      accessor: 'avatar'
     }, {
-      id: 'friendName',
       Header: 'Type',
-      accessor: d => d.friend.name
+      accessor: 'type'
     }, {
-      Header: props => <span>Friend Age</span>,
-      accessor: 'friend.age'
+      Header: 'Attribute',
+      accessor: 'attribute'
     }]
 
     return(
       <ReactTable
-        showPaginationBottom={false}
         data={data}
         columns={columns}
       />
